@@ -1,5 +1,8 @@
 package com.ordering.orderingtest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,16 +15,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class OrderingController {
 	
 	@Autowired
-	private OrderInfoRepository orderInfoRepository;
+	private OrderingServices orderingServices;
 	
 	@GetMapping(path="/{customerId}")
 	public @ResponseBody Iterable<OrderInfo> getOrderInfoByCustomerId(@PathVariable Integer customerId) {
-		return orderInfoRepository.findByCustomerId(customerId);
+		return orderingServices.findOrders(customerId);
 	}
 	
 	@GetMapping
 	public @ResponseBody Iterable<OrderInfo> getAllOrders() {
-		return orderInfoRepository.findAll();
+		return orderingServices.findOrders(null);
+	}
+	
+	@GetMapping(path="/{orderId}/order-actions")
+	public @ResponseBody List<String> getOrderActionsDetails(@PathVariable Integer orderId) {
+		List<String> orderActionsDetails = new ArrayList<>();
+		orderActionsDetails.add("| 100001 | Provide | Done |  13 | Active       | TV       |       0 | ");
+		orderActionsDetails.add("| 100001 | Provide | Done |  14 | Active       | TV       |       0 | ");
+		return orderActionsDetails;
 	}
 	
 }
